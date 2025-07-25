@@ -10,7 +10,7 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [dbo].[SP_RegistrarCuentaLaboratoriosWeb]
+ALTER PROCEDURE [dbo].[SP_RegistrarCuentaLaboratoriosWeb]
     @Pacienteid NVARCHAR(20),
     @Correo NVARCHAR(100),
     @Telefono NVARCHAR(20),
@@ -23,7 +23,7 @@ BEGIN
     IF EXISTS (
         SELECT 1
         FROM hiPruebas24.dbo.CuentaResultadosWeb
-        WHERE CorreoElectronico = @Correo OR Telefono = @Telefono
+        WHERE Telefono = @Telefono
     )
     BEGIN
         SELECT 'Ya existe una cuenta con ese correo o teléfono' AS mensaje;

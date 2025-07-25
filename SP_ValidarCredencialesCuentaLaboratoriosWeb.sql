@@ -14,14 +14,23 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+    -- Si encuentra credenciales válidas
     IF EXISTS (
         SELECT 1
-        FROM hiPruebas24.dbo.CuentaResultadosWeb
-        WHERE (CorreoElectronico = @Usuario OR Telefono = @Usuario)
-          AND Contrasenia = @Contrasenia
+        FROM hiPruebas24.dbo.CuentaResultadosWeb crw
+        WHERE (crw.CorreoElectronico = @Usuario OR crw.Telefono = @Usuario)
+          AND crw.Contrasenia = @Contrasenia
     )
     BEGIN
-        SELECT 'Inicio de sesión exitoso' AS mensaje;
+        SELECT TOP 1
+            'Inicio de sesión exitoso' AS mensaje,
+            crw.PacienteId,
+            dp.NombrePac + ' ' + dp.Apellidos AS NombreCompleto,
+			dp.FechaNacimiento
+        FROM hiPruebas24.dbo.CuentaResultadosWeb crw
+        INNER JOIN hiPruebas24.dbo.DatosPacientes dp ON crw.PacienteId = dp.PacienteId
+        WHERE (crw.CorreoElectronico = @Usuario OR crw.Telefono = @Usuario)
+          AND crw.Contrasenia = @Contrasenia;
     END
     ELSE
     BEGIN
